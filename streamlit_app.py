@@ -2,7 +2,7 @@ import os
 import streamlit as st
 import openai
 
-# Titre principal
+# Titre principal de l'application
 st.title("Application Multi-Chats - 3 Chatbots avec OpenAI (API mise à jour)")
 
 # Charger la clé API depuis st.secrets ou la variable d'environnement
@@ -21,30 +21,31 @@ if "messages_chat3" not in st.session_state:
 
 def chat_interface(chat_key: str, model: str):
     """
-    Affiche l'interface de chat pour une instance donnée identifiée par 'chat_key' 
-    et utilisant le modèle précisé dans 'model'.
+    Affiche l'interface de chat pour une instance donnée identifiée par 'chat_key',
+    et utilise le modèle spécifié dans 'model'.
     """
     messages = st.session_state[chat_key]
 
-    # Afficher l'historique du chat
-    for msg in messages:
-        with st.chat_message(msg["role"]):
+    # Affichage de l'historique de conversation
+    for idx, msg in enumerate(messages):
+        # Ajout d'une key unique pour chaque message peut aussi aider
+        with st.chat_message(msg["role"], key=f"{chat_key}_{msg['role']}_{idx}"):
             st.markdown(msg["content"])
 
-    # Saisie utilisateur
-    user_input = st.chat_input("Posez votre question :")
+    # Saisie de l'utilisateur avec une key unique
+    user_input = st.chat_input("Posez votre question :", key=f"{chat_key}_input")
     if user_input:
         # Ajout et affichage du message utilisateur
         messages.append({"role": "user", "content": user_input})
-        with st.chat_message("user"):
+        with st.chat_message("user", key=f"{chat_key}_user_{len(messages)}"):
             st.markdown(user_input)
 
-        # Préparation de la conversation pour l'appel à l'API
+        # Préparation de la conversation pour l'appel à l'API OpenAI
         conversation = [{"role": m["role"], "content": m["content"]} for m in messages]
 
         response_text = ""
         placeholder = st.empty()
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", key=f"{chat_key}_assistant_{len(messages)}"):
             # Appel à l'API OpenAI en mode streaming
             response_stream = openai.ChatCompletion.create(
                 model=model,
@@ -53,7 +54,6 @@ def chat_interface(chat_key: str, model: str):
             )
             # Affichage progressif de la réponse
             for chunk in response_stream:
-                # Le nouveau système renvoie des "delta" de réponse
                 if "choices" in chunk:
                     delta = chunk["choices"][0]["delta"]
                     if "content" in delta:
@@ -63,7 +63,7 @@ def chat_interface(chat_key: str, model: str):
         # Ajout de la réponse complète à l'historique
         messages.append({"role": "assistant", "content": response_text})
 
-# Création de trois onglets pour des chats indépendants
+# Création de trois onglets, chacun correspondant à un chat indépendant
 tabs = st.tabs(["Chat 1", "Chat 2", "Chat 3"])
 
 with tabs[0]:
