@@ -78,20 +78,20 @@ tabs = st.tabs(["Chat 1", "Chat 2", "Chat 3"])
 with tabs[0]:
     st.subheader("Chat 1")
     model_chat1 = st.selectbox("Choisissez le modèle pour Chat 1",
-                               options=["gpt-3.5-turbo", "gpt-4"],
+                               options=["gpt-4.1"],
                                key="model_chat1")
     chat_interface("messages_chat1", model_chat1)
 
 with tabs[1]:
     st.subheader("Chat 2")
     model_chat2 = st.selectbox("Choisissez le modèle pour Chat 2",
-                               options=["gpt-3.5-turbo", "gpt-4"],
+                               options=["gpt-4.1-mini"],
                                key="model_chat2")
     chat_interface("messages_chat2", model_chat2)
 
 with tabs[2]:
     st.subheader("Chat 3")
     model_chat3 = st.selectbox("Choisissez le modèle pour Chat 3",
-                               options=["gpt-3.5-turbo", "gpt-4"],
+                               options=["gpt-4.1-nano"],
                                key="model_chat3")
     chat_interface("messages_chat3", model_chat3)
