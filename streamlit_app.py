@@ -1,16 +1,13 @@
 import os
 import uuid
 import streamlit as st
-import openai
+from openai import OpenAI
 
-# Titre principal
-st.title("Application Multi-Chats - 3 Chatbots avec OpenAI (API mise à jour)")
+# Titre principal de l'application
+st.title("Application Multi-Chats - 3 Chatbots avec OpenAI (Nouvelle API)")
 
-# Chargement de la clé API depuis st.secrets (ou la variable d'environnement)
-if "OPENAI_API_KEY" in st.secrets:
-    openai.api_key = st.secrets["OPENAI_API_KEY"]
-else:
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+# Créer le client OpenAI
+client = OpenAI()
 
 # Initialiser les historiques de conversation pour chaque chat dans st.session_state
 for chat in ["messages_chat1", "messages_chat2", "messages_chat3"]:
@@ -30,50 +27,41 @@ def add_message(chat_key: str, role: str, content: str):
 
 def chat_interface(chat_key: str, model: str):
     """
-    Affiche l'interface de chat pour une instance donnée identifiée par chat_key,
+    Affiche l'interface de chat pour une instance identifiée par chat_key,
     en utilisant le modèle OpenAI précisé.
     """
     messages = st.session_state[chat_key]
 
     # Affichage de l'historique des messages
     for msg in messages:
-        # On n'utilise pas de key ici car st.chat_message ne supporte pas le paramètre key
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # Saisie de l'utilisateur avec une key unique pour le widget de saisie
+    # Zone de saisie utilisateur avec une key unique par chat
     user_input = st.chat_input("Posez votre question :", key=f"{chat_key}_input")
     if user_input:
-        # Ajout et affichage du message utilisateur
+        # Ajouter et afficher le message utilisateur
         add_message(chat_key, "user", user_input)
         with st.chat_message("user"):
             st.markdown(user_input)
 
-        # Préparation de la conversation pour l'appel à l'API OpenAI
+        # Préparer la conversation pour l'appel à l'API OpenAI
         conversation = [{"role": m["role"], "content": m["content"]} for m in st.session_state[chat_key]]
-        response_text = ""
-        placeholder = st.empty()  # Conteneur pour un affichage progressif
+        
+        # Appel à l'API OpenAI en utilisant la nouvelle syntaxe
+        completion = client.chat.completions.create(
+            model=model,
+            messages=conversation
+        )
+        # Récupérer la réponse complète
+        response_text = completion.choices[0].message.content
 
+        # Afficher la réponse de l'assistant
         with st.chat_message("assistant"):
-            # Appel à l'API OpenAI en mode streaming
-            response_stream = openai.ChatCompletion.create(
-                model=model,
-                messages=conversation,
-                stream=True
-            )
-            # Affichage progressif de la réponse
-            for chunk in response_stream:
-                if "choices" in chunk:
-                    delta = chunk["choices"][0]["delta"]
-                    if "content" in delta:
-                        chunk_text = delta["content"]
-                        response_text += chunk_text
-                        placeholder.markdown(response_text)
-
-        # Ajout de la réponse complète à l'historique
+            st.markdown(response_text)
         add_message(chat_key, "assistant", response_text)
 
-# Création de trois onglets, chacun correspondant à un chat indépendant
+# Création de trois onglets pour des chats indépendants
 tabs = st.tabs(["Chat 1", "Chat 2", "Chat 3"])
 
 with tabs[0]:
