@@ -48,7 +48,7 @@ def chat_interface(chat_key: str, model: str):
         # Préparer la conversation pour l'appel à l'API OpenAI
         conversation = [{"role": m["role"], "content": m["content"]} for m in st.session_state[chat_key]]
         
-        # Appel à l'API OpenAI en utilisant la nouvelle syntaxe
+        # Appel à l'API OpenAI en utilisant la syntaxe de la nouvelle API
         completion = client.chat.completions.create(
             model=model,
             messages=conversation
@@ -61,29 +61,27 @@ def chat_interface(chat_key: str, model: str):
             st.markdown(response_text)
         add_message(chat_key, "assistant", response_text)
 
-# Affichage des chats les uns en dessous des autres
-
-# ---------------------------
-# Chat 1
-st.subheader("Chat 1")
-model_chat1 = st.selectbox("Choisissez le modèle pour Chat 1", options=["gpt-4.1"], key="model_chat1")
-st.markdown(f"**Modèle sélectionné : {model_chat1}**")
-chat_interface("messages_chat1", model_chat1)
+# Interface de Chat 1 dans son propre conteneur
+with st.container():
+    st.subheader("Chat 1")
+    model_chat1 = st.selectbox("Choisissez le modèle pour Chat 1", options=["gpt-4.1"], key="model_chat1")
+    st.markdown(f"**Modèle sélectionné : {model_chat1}**")
+    chat_interface("messages_chat1", model_chat1)
 
 st.markdown("---")  # Séparateur horizontal
 
-# ---------------------------
-# Chat 2
-st.subheader("Chat 2")
-model_chat2 = st.selectbox("Choisissez le modèle pour Chat 2", options=["gpt-4.1-mini"], key="model_chat2")
-st.markdown(f"**Modèle sélectionné : {model_chat2}**")
-chat_interface("messages_chat2", model_chat2)
+# Interface de Chat 2 dans son propre conteneur
+with st.container():
+    st.subheader("Chat 2")
+    model_chat2 = st.selectbox("Choisissez le modèle pour Chat 2", options=["gpt-4.1-mini"], key="model_chat2")
+    st.markdown(f"**Modèle sélectionné : {model_chat2}**")
+    chat_interface("messages_chat2", model_chat2)
 
 st.markdown("---")  # Séparateur horizontal
 
-# ---------------------------
-# Chat 3
-st.subheader("Chat 3")
-model_chat3 = st.selectbox("Choisissez le modèle pour Chat 3", options=["gpt-4.1-nano"], key="model_chat3")
-st.markdown(f"**Modèle sélectionné : {model_chat3}**")
-chat_interface("messages_chat3", model_chat3)
+# Interface de Chat 3 dans son propre conteneur
+with st.container():
+    st.subheader("Chat 3")
+    model_chat3 = st.selectbox("Choisissez le modèle pour Chat 3", options=["gpt-4.1-nano"], key="model_chat3")
+    st.markdown(f"**Modèle sélectionné : {model_chat3}**")
+    chat_interface("messages_chat3", model_chat3)
