@@ -62,29 +62,29 @@ def chat_interface(chat_key: str, model: str):
         add_message(chat_key, "assistant", response_text)
 
 # ---------------------------
-# Chat 1 : avec sélection du modèle via selectbox
+# Chat 1 avec modèle fixe "gpt-4.1"
 with st.container():
     st.subheader("Chat 1")
-    model_chat1 = st.selectbox("Choisissez le modèle pour Chat 1", options=["gpt-4.1"], key="model_chat1")
-    st.markdown(f"**Modèle sélectionné : {model_chat1}**")
+    model_chat1 = "gpt-4.1"
+    st.markdown(f"**Modèle utilisé : {model_chat1}**")
     chat_interface("messages_chat1", model_chat1)
 
 st.markdown("---")  # Séparateur horizontal
 
 # ---------------------------
-# Chat 2 : modèle fixé (pas de selectbox)
+# Chat 2 avec modèle fixe "gpt-4.1-mini"
 with st.container():
     st.subheader("Chat 2")
-    model_chat2 = "gpt-4.1-mini"  # Modèle fixe pour Chat 2
-    st.markdown(f"**Modèle sélectionné : {model_chat2}**")
+    model_chat2 = "gpt-4.1-mini"
+    st.markdown(f"**Modèle utilisé : {model_chat2}**")
     chat_interface("messages_chat2", model_chat2)
 
 st.markdown("---")  # Séparateur horizontal
 
 # ---------------------------
-# Chat 3 : avec sélection du modèle via selectbox
+# Chat 3 avec modèle fixe "gpt-4.1-nano"
 with st.container():
     st.subheader("Chat 3")
-    model_chat3 = st.selectbox("Choisissez le modèle pour Chat 3", options=["gpt-4.1-nano"], key="model_chat3")
-    st.markdown(f"**Modèle sélectionné : {model_chat3}**")
+    model_chat3 = "gpt-4.1-nano"
+    st.markdown(f"**Modèle utilisé : {model_chat3}**")
     chat_interface("messages_chat3", model_chat3)
