@@ -61,20 +61,29 @@ def chat_interface(chat_key: str, model: str):
             st.markdown(response_text)
         add_message(chat_key, "assistant", response_text)
 
-# Création de trois onglets pour des chats indépendants
-tabs = st.tabs(["Chat 1", "Chat 2", "Chat 3"])
+# Affichage des chats les uns en dessous des autres
 
-with tabs[0]:
-    st.subheader("Chat 1")
-    model_chat1 = st.selectbox("Choisissez le modèle pour Chat 1", options=["gpt-4.1"], key="model_chat1")
-    chat_interface("messages_chat1", model_chat1)
+# ---------------------------
+# Chat 1
+st.subheader("Chat 1")
+model_chat1 = st.selectbox("Choisissez le modèle pour Chat 1", options=["gpt-4.1"], key="model_chat1")
+st.markdown(f"**Modèle sélectionné : {model_chat1}**")
+chat_interface("messages_chat1", model_chat1)
 
-with tabs[1]:
-    st.subheader("Chat 2")
-    model_chat2 = st.selectbox("Choisissez le modèle pour Chat 2", options=["gpt-4.1-mini"], key="model_chat2")
-    chat_interface("messages_chat2", model_chat2)
+st.markdown("---")  # Séparateur horizontal
 
-with tabs[2]:
-    st.subheader("Chat 3")
-    model_chat3 = st.selectbox("Choisissez le modèle pour Chat 3", options=["gpt-4.1-nano"], key="model_chat3")
-    chat_interface("messages_chat3", model_chat3)
+# ---------------------------
+# Chat 2
+st.subheader("Chat 2")
+model_chat2 = st.selectbox("Choisissez le modèle pour Chat 2", options=["gpt-4.1-mini"], key="model_chat2")
+st.markdown(f"**Modèle sélectionné : {model_chat2}**")
+chat_interface("messages_chat2", model_chat2)
+
+st.markdown("---")  # Séparateur horizontal
+
+# ---------------------------
+# Chat 3
+st.subheader("Chat 3")
+model_chat3 = st.selectbox("Choisissez le modèle pour Chat 3", options=["gpt-4.1-nano"], key="model_chat3")
+st.markdown(f"**Modèle sélectionné : {model_chat3}**")
+chat_interface("messages_chat3", model_chat3)
