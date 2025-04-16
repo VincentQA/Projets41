@@ -4,7 +4,7 @@ import streamlit as st
 from openai import OpenAI
 
 # Titre principal de l'application
-st.title("Application Multi-Chats - 3 Chatbots avec OpenAI (Nouvelle API)")
+st.title(" Multi-Chats - GPT 4.1")
 
 # Créer le client OpenAI
 client = OpenAI()
